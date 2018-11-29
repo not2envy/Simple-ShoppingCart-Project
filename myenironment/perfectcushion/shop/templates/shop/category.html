@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
+  {% extends "base.html" %} {% load staticfiles %} {% block metadescription %} {% if category %} {{ category.description|truncatewords:155}} {% else %} Welcome to PC Swap Yards, A place where your community helps eachother build PC's and offer
+  affordable components and better deals. {% endif %} {% endblock %} {% block title %} {% if category %} {{ category.name }} - PC Swap Yard {% else %} Cool PC parts! - PC Swap Yard {% endif %} {% endblock %} {% block content %} 
+  <!--Breadcrumb navigation-->
+   {% if category %}
+  <div class="row my_row_class">
+    <div class="mx-auto">
+      <p><a href="{% url 'shop:allProdCat' %}">PC parts</a> | {{category.name}}</p>
+    </div>
+  </div>{% endif %}
+  <div class="mx-auto">{% if category %} <!--incase the category exist-->
+   <img alt="{{category.name}}"
+       class="my_image"
+       src="{{category.image.url}}"></div><br>
+  <div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="justify">{{category.description}}</p>
+  </div>{% else %}
+  <div><img alt="Our PC parts Collection"
+       class="my_image my_image_padding"
+       src="{% static 'img/bannertwo.jpg'%}"></div><br>
+  <div>
+    <h1 class="text-center my_title">Our PC parts Collection</h1>
+    <p class="text-jus">Our mission is to bring together your local PC community. If your looking to upgrade your current PC rig or just starting out, this is the place to be. In PC Swap Yard, you will have a market place of people just like you
+    either selling parts of thier PC rigt to upgrade or posting the cheapest listing on other sites so you'll always have the best deal in town. If your starting out building your first PC, you will have the community here to help you out and guide
+    your in the right direction. PC Swap Yard is more then just a market place. there's a donation section were you could give old unwated "but working" PC components for those who might be able to offord otherwise. From built PC to GPUS these
+    Donations from the community will help spead the PC Master Race to the world!</p>
+  </div>{% endif %}
+  <div class="container">
+    <div class="row mx-auto">
+      {% for product in products.object_list %}
+      <div class="my_bottom_margin col-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+        <div class="card text-center" style="min-width: 18rem;">
+          <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" alt="{{product.name}}"></a>
+          <div class="card-body">
+            <h4>{{product.name}}</h4>
+            <p>${{product.price}}</p>
+          </div>
+        </div>
+      </div>{% endfor %}
+    </div>
+    <div class="mx-auto">
+    {% if products.paginator.num_pages > 1 %}
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+                <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %}active{% endif %}">{{pg}}</a>
+            {% endfor %}
+    {% endif %}
+    </div>
+    <br>
+  </div>{% endblock %}
+
